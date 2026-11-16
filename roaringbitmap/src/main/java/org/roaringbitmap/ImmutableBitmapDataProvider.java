@@ -65,6 +65,19 @@ public interface ImmutableBitmapDataProvider {
   void forEach(IntConsumer ic);
 
   /**
+   * Visit all values in the bitmap and pass them to the consumer.
+   *
+   * <p>Library implementations pass the consumer straight through to the containers. The default
+   * implementation, used only by third-party implementations of this interface, adapts the
+   * consumer when it is not already an {@link IntConsumer}.
+   *
+   * @param ic the consumer
+   */
+  default void forEach(java.util.function.IntConsumer ic) {
+    forEach(ic instanceof IntConsumer ? (IntConsumer) ic : (IntConsumer) ic::accept);
+  }
+
+  /**
    * For better performance, consider using the {@link #forEach forEach} method.
    * @return a custom iterator over set bits, the bits are traversed in unsigned integer ascending
    *     sorted order

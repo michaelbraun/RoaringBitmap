@@ -5,9 +5,13 @@ package org.roaringbitmap;
  */
 public class IntConsumerRelativeRangeAdapter implements RelativeRangeConsumer {
   final int start;
-  final IntConsumer absolutePositionConsumer;
+  final java.util.function.IntConsumer absolutePositionConsumer;
 
   public IntConsumerRelativeRangeAdapter(int start, final IntConsumer lc) {
+    this(start, (java.util.function.IntConsumer) lc);
+  }
+
+  public IntConsumerRelativeRangeAdapter(int start, final java.util.function.IntConsumer lc) {
     this.start = start;
     this.absolutePositionConsumer = lc;
   }

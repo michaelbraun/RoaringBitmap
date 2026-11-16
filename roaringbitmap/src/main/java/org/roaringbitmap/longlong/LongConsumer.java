@@ -20,12 +20,17 @@ package org.roaringbitmap.longlong;
  *   }
  * }
  * </pre>
+ *
+ * <p>This interface extends {@link java.util.function.LongConsumer}, so instances can be passed to
+ * JDK APIs (for example {@code LongStream.forEach}) and to the library methods that accept a
+ * {@link java.util.function.LongConsumer}, without wrapping.
  */
-public interface LongConsumer {
+public interface LongConsumer extends java.util.function.LongConsumer {
   /**
    * Receives the long
    *
    * @param value the long value
    */
+  @Override
   void accept(long value);
 }

@@ -2506,7 +2506,7 @@ public final class RunContainer extends Container implements Cloneable {
   }
 
   @Override
-  public void forEach(char msb, IntConsumer ic) {
+  public void forEach(char msb, java.util.function.IntConsumer ic) {
     int high = msb << 16;
     for (int k = 0; k < this.nbrruns; ++k) {
       int base = this.getValue(k) | high;

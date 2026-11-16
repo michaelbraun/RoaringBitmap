@@ -58,6 +58,19 @@ public interface ImmutableLongBitmapDataProvider {
   void forEach(LongConsumer lc);
 
   /**
+   * Visit all values in the bitmap and pass them to the consumer.
+   *
+   * <p>Library implementations use the consumer directly. The default implementation, used only
+   * by third-party implementations of this interface, adapts the consumer when it is not already
+   * a {@link LongConsumer}.
+   *
+   * @param lc the consumer
+   */
+  default void forEach(java.util.function.LongConsumer lc) {
+    forEach(lc instanceof LongConsumer ? (LongConsumer) lc : (LongConsumer) lc::accept);
+  }
+
+  /**
    * For better performance, consider the Use the {@link #forEach forEach} method.
    *
    * @return a custom iterator over set bits, the bits are traversed in ascending sorted order

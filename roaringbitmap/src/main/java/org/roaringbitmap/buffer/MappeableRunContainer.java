@@ -11,7 +11,6 @@ import static org.roaringbitmap.buffer.MappeableBitmapContainer.MAX_CAPACITY;
 import org.roaringbitmap.CharIterator;
 import org.roaringbitmap.Container;
 import org.roaringbitmap.ContainerBatchIterator;
-import org.roaringbitmap.IntConsumer;
 import org.roaringbitmap.PeekableCharIterator;
 import org.roaringbitmap.RunContainer;
 
@@ -2452,7 +2451,7 @@ public final class MappeableRunContainer extends MappeableContainer implements C
   }
 
   @Override
-  public void forEach(char msb, IntConsumer ic) {
+  public void forEach(char msb, java.util.function.IntConsumer ic) {
     int high = ((int) msb) << 16;
     for (int k = 0; k < this.nbrruns; ++k) {
       int base = (this.getValue(k) & 0xFFFF) | high;

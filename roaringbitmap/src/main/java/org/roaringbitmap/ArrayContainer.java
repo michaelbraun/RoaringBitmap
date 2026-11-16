@@ -1398,7 +1398,7 @@ public final class ArrayContainer extends Container implements Cloneable {
   }
 
   @Override
-  public void forEach(char msb, IntConsumer ic) {
+  public void forEach(char msb, java.util.function.IntConsumer ic) {
     int high = msb << 16;
     for (int k = 0; k < cardinality; ++k) {
       ic.accept(content[k] | high);

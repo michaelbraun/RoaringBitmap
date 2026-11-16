@@ -17,12 +17,17 @@ package org.roaringbitmap;
  *   }
  * }
  * </pre>
+ *
+ * <p>This interface extends {@link java.util.function.IntConsumer}, so instances can be passed to
+ * JDK APIs (for example {@code IntStream.forEach}) and to the library methods that accept a
+ * {@link java.util.function.IntConsumer}, without wrapping.
  */
-public interface IntConsumer {
+public interface IntConsumer extends java.util.function.IntConsumer {
   /**
    * Receives the integer
    *
    * @param value the integer value
    */
+  @Override
   void accept(int value);
 }

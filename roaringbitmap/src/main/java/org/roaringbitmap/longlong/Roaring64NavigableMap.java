@@ -53,6 +53,10 @@ import java.util.TreeMap;
 // @Beta: this class is still in early stage. Its API may change and has not proofed itself as
 // bug-proof
 public class Roaring64NavigableMap implements Externalizable, LongBitmapDataProvider {
+  // Pinned to the value computed for release 1.6.30, so that adding or changing methods does not
+  // break Java deserialization of instances written by 1.6.30.
+  private static final long serialVersionUID = 8468077649095883141L;
+
   // The initial format of Roaring64NavigableMap
   // 1: a boolean indicating if we process signed or unsigned longs
   // 2: an int indicating the umber of highToLow buckets
@@ -497,17 +501,17 @@ public class Roaring64NavigableMap implements Externalizable, LongBitmapDataProv
 
   @Override
   public void forEach(final LongConsumer lc) {
+    forEach((java.util.function.LongConsumer) lc);
+  }
+
+  @Override
+  public void forEach(final java.util.function.LongConsumer lc) {
     for (final Entry<Integer, BitmapDataProvider> highEntry : highToBitmap.entrySet()) {
+      final int high = highEntry.getKey();
+      // One adapter per high bucket (not per value) to prepend the high 32 bits.
       highEntry
           .getValue()
-          .forEach(
-              new IntConsumer() {
-
-                @Override
-                public void accept(int low) {
-                  lc.accept(RoaringIntPacking.pack(highEntry.getKey(), low));
-                }
-              });
+          .forEach((IntConsumer) low -> lc.accept(RoaringIntPacking.pack(high, low)));
     }
   }
 
@@ -692,7 +696,8 @@ public class Roaring64NavigableMap implements Externalizable, LongBitmapDataProv
    * BEWARE This method is synchronized as it is a mutating operation called by read operations
    * (as it mutates some cached data-structure used to faster read operation).
    */
-  private synchronized void ensureOne(Map.Entry<Integer, BitmapDataProvider> e, int currentHigh, int indexOk) {
+  private synchronized void ensureOne(
+      Map.Entry<Integer, BitmapDataProvider> e, int currentHigh, int indexOk) {
     // sortedHighs are valid only up to some index
     assert indexOk <= sortedHighs.length : indexOk + " is bigger than " + sortedHighs.length;
 

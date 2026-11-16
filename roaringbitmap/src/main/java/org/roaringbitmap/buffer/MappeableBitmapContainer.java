@@ -13,7 +13,6 @@ import org.roaringbitmap.BitmapContainer;
 import org.roaringbitmap.CharIterator;
 import org.roaringbitmap.Container;
 import org.roaringbitmap.ContainerBatchIterator;
-import org.roaringbitmap.IntConsumer;
 import org.roaringbitmap.PeekableCharIterator;
 import org.roaringbitmap.Util;
 
@@ -1948,7 +1947,7 @@ public final class MappeableBitmapContainer extends MappeableContainer implement
   }
 
   @Override
-  public void forEach(char msb, IntConsumer ic) {
+  public void forEach(char msb, java.util.function.IntConsumer ic) {
     int high = ((int) msb) << 16;
     if (BufferUtil.isBackedBySimpleArray(bitmap)) {
       long[] b = bitmap.array();

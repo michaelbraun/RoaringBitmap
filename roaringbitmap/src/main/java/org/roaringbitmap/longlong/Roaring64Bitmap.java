@@ -34,6 +34,10 @@ import java.util.Objects;
  */
 public class Roaring64Bitmap implements Externalizable, LongBitmapDataProvider {
 
+  // Pinned to the value computed for release 1.6.30, so that adding or changing methods does not
+  // break Java deserialization of instances written by 1.6.30.
+  private static final long serialVersionUID = -7252481133356733910L;
+
   private HighLowContainer highLowContainer;
 
   public Roaring64Bitmap() {
@@ -265,6 +269,11 @@ public class Roaring64Bitmap implements Externalizable, LongBitmapDataProvider {
 
   @Override
   public void forEach(final LongConsumer lc) {
+    forEach((java.util.function.LongConsumer) lc);
+  }
+
+  @Override
+  public void forEach(final java.util.function.LongConsumer lc) {
     KeyIterator keyIterator = highLowContainer.highKeyIterator();
     while (keyIterator.hasNext()) {
       byte[] high = keyIterator.next();
@@ -356,6 +365,17 @@ public class Roaring64Bitmap implements Externalizable, LongBitmapDataProvider {
    * @param lc Code to be executed for each present value.
    */
   public void forEachInRange(long start, int length, final LongConsumer lc) {
+    forEachInRange(start, length, (java.util.function.LongConsumer) lc);
+  }
+
+  /**
+   * Consume each value present in the range [start, start + length).
+   *
+   * @param start Lower bound of values to consume.
+   * @param length Maximum number of values to consume.
+   * @param lc Code to be executed for each present value.
+   */
+  public void forEachInRange(long start, int length, final java.util.function.LongConsumer lc) {
     forAllInRange(start, length, new LongConsumerRelativeRangeAdapter(start, lc));
   }
 

@@ -7,9 +7,13 @@ import org.roaringbitmap.RelativeRangeConsumer;
  */
 public class LongConsumerRelativeRangeAdapter implements RelativeRangeConsumer {
   final long start;
-  final LongConsumer absolutePositionConsumer;
+  final java.util.function.LongConsumer absolutePositionConsumer;
 
   public LongConsumerRelativeRangeAdapter(long start, final LongConsumer lc) {
+    this(start, (java.util.function.LongConsumer) lc);
+  }
+
+  public LongConsumerRelativeRangeAdapter(long start, final java.util.function.LongConsumer lc) {
     this.start = start;
     this.absolutePositionConsumer = lc;
   }

@@ -19,6 +19,10 @@ import java.util.NoSuchElementException;
 public abstract class Container
     implements Iterable<Character>, Cloneable, Externalizable, WordStorage<Container> {
 
+  // Pinned to the value computed for release 1.6.30, so that adding or changing methods does not
+  // break Java deserialization of instances written by 1.6.30.
+  private static final long serialVersionUID = -8401473924111164690L;
+
   /**
    * Create a container initialized with a range of consecutive values
    *
@@ -320,7 +324,19 @@ public abstract class Container
    * @param msb 16 most significant bits
    * @param ic consumer
    */
-  public abstract void forEach(char msb, IntConsumer ic);
+  public abstract void forEach(char msb, java.util.function.IntConsumer ic);
+
+  /**
+   * Retained for binary compatibility; delegates to
+   * {@link #forEach(char, java.util.function.IntConsumer)}. (Containers cannot be subclassed
+   * outside this package, because of package-private abstract methods, so only callers are
+   * affected by the signature change.)
+   * @param msb 16 most significant bits
+   * @param ic consumer
+   */
+  public void forEach(char msb, IntConsumer ic) {
+    forEach(msb, (java.util.function.IntConsumer) ic);
+  }
 
   /**
    * Consume presence information for all values in this container.

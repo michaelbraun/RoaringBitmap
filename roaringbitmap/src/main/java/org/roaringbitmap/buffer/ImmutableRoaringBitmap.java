@@ -1488,6 +1488,11 @@ public class ImmutableRoaringBitmap
 
   @Override
   public void forEach(IntConsumer ic) {
+    forEach((java.util.function.IntConsumer) ic);
+  }
+
+  @Override
+  public void forEach(java.util.function.IntConsumer ic) {
     for (int i = 0; i < this.highLowContainer.size(); i++) {
       highLowContainer.getContainerAtIndex(i).forEach(highLowContainer.getKeyAtIndex(i), ic);
     }

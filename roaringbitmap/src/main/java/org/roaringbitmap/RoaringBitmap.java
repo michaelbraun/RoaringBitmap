@@ -2058,6 +2058,11 @@ public class RoaringBitmap
 
   @Override
   public void forEach(IntConsumer ic) {
+    forEach((java.util.function.IntConsumer) ic);
+  }
+
+  @Override
+  public void forEach(java.util.function.IntConsumer ic) {
     for (int i = 0; i < this.highLowContainer.size(); i++) {
       this.highLowContainer.getContainerAtIndex(i).forEach(this.highLowContainer.keys[i], ic);
     }
@@ -2197,6 +2202,17 @@ public class RoaringBitmap
    * @param ic Code to be executed for each present value.
    */
   public void forEachInRange(int start, int length, final IntConsumer ic) {
+    forEachInRange(start, length, (java.util.function.IntConsumer) ic);
+  }
+
+  /**
+   * Consume each value present in the range [start, start + length).
+   *
+   * @param start Lower bound of values to consume.
+   * @param length Maximum number of values to consume.
+   * @param ic Code to be executed for each present value.
+   */
+  public void forEachInRange(int start, int length, final java.util.function.IntConsumer ic) {
     forAllInRange(start, length, new IntConsumerRelativeRangeAdapter(start, ic));
   }
 
